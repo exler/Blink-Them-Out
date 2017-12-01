@@ -5,12 +5,10 @@ Anim = require "lib/anim8"
 gameStart = false
 
 leftPlayer = {x = -12, y = 160, img = nil}
-leftPlayerScore = 0
 leftPlayerWin = false
 leftEarlyPress = false
 
 rightPlayer = {x = 580, y = 160, img = nil}
-rightPlayerScore = 0
 rightPlayerWin = false
 rightEarlyPress = false
 
@@ -29,13 +27,18 @@ function love.load()
 
     leftIdle = love.graphics.newImage("gfx/leftPlayer.png")
     leftPlayer.img = leftIdle
+    leftBlink = love.graphics.newImage("gfx/leftBlink.png")
+    leftDead = love.graphics.newImage("gfx/leftDead.png")
 
     rightIdle = love.graphics.newImage("gfx/rightPlayer.png")
     rightPlayer.img = rightIdle
+    rightBlink = love.graphics.newImage("gfx/rightBlink.png")
+    rightDead = love.graphics.newImage("gfx/rightDead.png")
 
     scaryImgs = {
         love.graphics.newImage("gfx/scary1.png"), 
-        love.graphics.newImage("gfx/scary2.png")
+        love.graphics.newImage("gfx/scary2.png"),
+        love.graphics.newImage("gfx/scary3.png")
     }
 
     math.randomseed(os.time())
@@ -84,22 +87,16 @@ function love.update(dt)
                 -- love.audio.play(PressSound)
                 canPress = false
                 leftPlayerWin = true
-                leftPlayerScore = leftPlayerScore + 1
             else
                 leftEarlyPress = true
-                rightPlayerWin = true
-                rightPlayerScore = rightPlayerScore + 1
             end
         elseif love.keyboard.isDown("rctrl") and rightEarlyPress == false then
             if canPress == true and rightEarlyPress == false then
                 -- love.audio.play(PressSound)
                 canPress = false
                 rightPlayerWin = true
-                rightPlayerScore = rightPlayerScore + 1
             else
                 rightEarlyPress = true
-                leftPlayerWin = true
-                leftPlayerScore = rightPlayerScore + 1
             end
         end
     end
@@ -113,11 +110,15 @@ function love.draw()
     end
 
     if gameStart == true then
-        if rightPlayerWin == false then
-            love.graphics.draw(leftPlayer.img, leftPlayer.x, leftPlayer.y)
-        end
-        if leftPlayerWin == false then
+        if rightPlayerWin == false and rightEarlyPress == false then
             love.graphics.draw(rightPlayer.img, rightPlayer.x, rightPlayer.y)
+        elseif rightPlayerWin == false and rightEarlyPress == true then
+            love.graphics.draw(rightBlink, rightPlayer.x, rightPlayer.y)
+        end
+        if leftPlayerWin == false and leftEarlyPress == false then
+            love.graphics.draw(leftPlayer.img, leftPlayer.x, leftPlayer.y)
+        elseif leftPlayerWin == false and leftEarlyPress == true then
+            love.graphics.draw(leftBlink, leftPlayer.x, leftPlayer.y)
         end
 
         if canPress == true and leftPlayerWin == false and rightPlayerWin == false then
@@ -126,17 +127,34 @@ function love.draw()
         end
 
         if (leftPlayerWin == true or rightPlayerWin == true) or (leftEarlyPress == true and rightEarlyPress == true) then
+            if leftPlayerWin == true then
+                love.graphics.print(
+                    "Lefty wins!",
+                    love.graphics:getWidth() / 2 - 50,
+                    love.graphics:getHeight() / 2 - 200
+                )
+                love.graphics.draw(leftPlayer.img, leftPlayer.x, leftPlayer.y)
+                love.graphics.draw(rightDead, rightPlayer.x, rightPlayer.y)
+            end
+            if rightPlayerWin == true then
+                love.graphics.print(
+                    "Righty wins!",
+                    love.graphics:getWidth() / 2 - 50,
+                    love.graphics:getHeight() / 2 - 200
+                )
+                love.graphics.draw(rightPlayer.img, rightPlayer.x, rightPlayer.y)
+                love.graphics.draw(leftDead, leftPlayer.x, leftPlayer.y)
+            end
+
             love.graphics.print(
                 "Press Space to reset!",
                 love.graphics:getWidth() / 2 - 90,
-                love.graphics:getHeight() / 2 - 200
+                love.graphics:getHeight() / 2
             )
             love.graphics.setColor(255, 255, 255, 255)
         end
 
-        love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
-		love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
-		love.graphics.print("" ..tostring(canPressTimer), 360, 0)
+		-- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
     end
 end
 
