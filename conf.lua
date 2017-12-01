@@ -1,6 +1,6 @@
 function love.conf(t)
     -- global variables
-    windowScale = 3
+    windowScale = 2
     windowWidth = 480
     windowHeight = 270
 
