@@ -1,15 +1,18 @@
+-- 3rd party
+Anim = require "lib/anim8"
+
 -- global variables
 gameStart = false
 
-leftPlayer = {x = 50, y = 200, img = nil}
+leftPlayer = {x = -12, y = 160, img = nil}
 leftPlayerScore = 0
 leftPlayerWin = false
-lToEarly = false
+leftEarlyPress = false
 
-rightPlayer = {x = 600, y = 200, img = nil}
+rightPlayer = {x = 580, y = 160, img = nil}
 rightPlayerScore = 0
 rightPlayerWin = false
-rToEarly = false
+rightEarlyPress = false
 
 canPress = false
 canPressTimerMax = 10
@@ -19,32 +22,25 @@ randomNumber = math.random(1, 20)
 function love.load()
     font = love.graphics.newFont("fonts/Phantex.ttf", 30)
     love.graphics.setFont(font)
-    -- level = love.graphics.newImage("gfx/level.png")
+    bg = love.graphics.newImage("gfx/bg.png")
 
-    -- scarySound = love.audio.newSource("gfx/scary.wav")
+    scarySound = love.audio.newSource("sfx/scary.wav")
     -- PressSound = love.audio.newSource("gfx/Press.wav")
 
     leftIdle = love.graphics.newImage("gfx/leftPlayer.png")
     leftPlayer.img = leftIdle
-    -- lPress01 = love.graphics.newImage("gfx/leftPlayerPress01.png")
-    -- lPress02 = love.graphics.newImage("gfx/leftPlayerPress02.png")
-    -- lPress03 = love.graphics.newImage("gfx/leftPlayerPress03.png")
-    -- lPress04 = love.graphics.newImage("gfx/leftPlayerPress04.png")
-    -- lPress05 = love.graphics.newImage("gfx/leftPlayerPress05.png")
-    -- lPress06 = love.graphics.newImage("gfx/leftPlayerPress06.png")
-    -- lPress07 = love.graphics.newImage("gfx/leftPlayerPress07.png")
 
     rightIdle = love.graphics.newImage("gfx/rightPlayer.png")
     rightPlayer.img = rightIdle
-    -- rPress01 = love.graphics.newImage("gfx/rightPlayerPress01.png")
-    -- rPress02 = love.graphics.newImage("gfx/rightPlayerPress02.png")
-    -- rPress03 = love.graphics.newImage("gfx/rightPlayerPress03.png")
-    -- rPress04 = love.graphics.newImage("gfx/rightPlayerPress04.png")
-    -- rPress05 = love.graphics.newImage("gfx/rightPlayerPress05.png")
-    -- rPress06 = love.graphics.newImage("gfx/rightPlayerPress06.png")
-    -- rPress07 = love.graphics.newImage("gfx/rightPlayerPress07.png")
 
-    -- PressText = love.graphics.newImage("gfx/Press.png")
+    scaryImgs = {
+        love.graphics.newImage("gfx/scary1.png"), 
+        love.graphics.newImage("gfx/scary2.png")
+    }
+
+    math.randomseed(os.time())
+
+    scaryImg = scaryImgs[math.random(#scaryImgs)]
 end
 
 function love.update(dt)
@@ -56,19 +52,20 @@ function love.update(dt)
         if
             leftPlayerWin == true and love.keyboard.isDown "space" or
                 rightPlayerWin == true and love.keyboard.isDown "space" or
-                lToEarly == true and rToEarly == true and love.keyboard.isDown "space"
+                leftEarlyPress == true and rightEarlyPress == true and love.keyboard.isDown "space"
          then
             leftPlayer.img = leftIdle
             leftPlayerWin = false
-            lToEarly = false
+            leftEarlyPress = false
             rightPlayer.img = rightIdle
             rightPlayerWin = false
-            rToEarly = false
-            animateTime = 8
+            rightEarlyPress = false
             canPress = false
             canPressTimer = 5
             canPressTimer = canPressTimerMax
+            math.randomseed(os.time())
             randomNumber = math.random(1, 20)
+            scaryImg = scaryImgs[math.random(#scaryImgs)]
         end
 
         if canPressTimer > 0 then
@@ -77,79 +74,39 @@ function love.update(dt)
 
         if canPressTimer < 0 and leftPlayerWin == false and rightPlayerWin == false then
             if canPress == false then
-                -- love.audio.play(scarySound)
+                love.audio.play(scarySound)
             end
             canPress = true
         end
 
-        if love.keyboard.isDown("lctrl") and lToEarly == false then
-            if canPress == true and lToEarly == false then
+        if love.keyboard.isDown("lctrl") and leftEarlyPress == false then
+            if canPress == true and leftEarlyPress == false then
                 -- love.audio.play(PressSound)
                 canPress = false
                 leftPlayerWin = true
                 leftPlayerScore = leftPlayerScore + 1
             else
-                lToEarly = true
+                leftEarlyPress = true
+                rightPlayerWin = true
+                rightPlayerScore = rightPlayerScore + 1
             end
-        elseif love.keyboard.isDown("rctrl") and rToEarly == false then
-            if canPress == true and rToEarly == false then
+        elseif love.keyboard.isDown("rctrl") and rightEarlyPress == false then
+            if canPress == true and rightEarlyPress == false then
                 -- love.audio.play(PressSound)
                 canPress = false
                 rightPlayerWin = true
                 rightPlayerScore = rightPlayerScore + 1
             else
-                rToEarly = true
+                rightEarlyPress = true
+                leftPlayerWin = true
+                leftPlayerScore = rightPlayerScore + 1
             end
         end
-
-        --[[if leftPlayerWin == true then
-            animateTime = animateTime - (10 * dt)
-
-            if (animateTime > 7) then
-                leftPlayer.img = lPress01
-            elseif (animateTime > 6) then
-                leftPlayer.img = lPress02
-            elseif (animateTime > 5) then
-                leftPlayer.img = lPress03
-            elseif (animateTime > 4) then
-                leftPlayer.img = lPress04
-            elseif (animateTime > 3) then
-                leftPlayer.img = lPress05
-            elseif (animateTime > 2) then
-                leftPlayer.img = lPress06
-            elseif (animateTime > 1) then
-                leftPlayer.img = lPress07
-            elseif animateTime < 0 then
-                animateTime = 5
-            end
-        end
-
-        if rightPlayerWin == true then
-            animateTime = animateTime - (10 * dt)
-
-            if (animateTime > 7) then
-                rightPlayer.img = rPress01
-            elseif (animateTime > 6) then
-                rightPlayer.img = rPress02
-            elseif (animateTime > 5) then
-                rightPlayer.img = rPress03
-            elseif (animateTime > 4) then
-                rightPlayer.img = rPress04
-            elseif (animateTime > 3) then
-                rightPlayer.img = rPress05
-            elseif (animateTime > 2) then
-                rightPlayer.img = rPress06
-            elseif (animateTime > 1) then
-                rightPlayer.img = rPress07
-            elseif animateTime < 0 then
-                animateTime = 5
-            end
-        end]]--
     end
 end
 
 function love.draw()
-    -- love.graphics.draw(level, 0, 0)
+    love.graphics.draw(bg, 0, 0)
 
     if gameStart == false then
         love.graphics.print("Press S to start!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2)
@@ -164,21 +121,27 @@ function love.draw()
         end
 
         if canPress == true and leftPlayerWin == false and rightPlayerWin == false then
-            -- love.graphics.draw(PressText, love.graphics:getWidth() / 2 - 80, love.graphics:getHeight() / 2 - 260)
+            love.graphics.draw(scaryImg, love.graphics:getWidth() / 2 - 256, love.graphics:getHeight() / 2 - 256)
+            love.graphics.print("Blink now!", love.graphics:getWidth() / 2 - 30, love.graphics:getHeight() - 46)
         end
 
-        if (leftPlayerWin == true or rightPlayerWin == true) or (lToEarly == true and rToEarly == true) then
-            love.graphics.setColor(0, 0, 0, 255)
+        if (leftPlayerWin == true or rightPlayerWin == true) or (leftEarlyPress == true and rightEarlyPress == true) then
             love.graphics.print(
-                "Press spacebar to Reset",
-                love.graphics:getWidth() / 2 - 124,
+                "Press Space to reset!",
+                love.graphics:getWidth() / 2 - 90,
                 love.graphics:getHeight() / 2 - 200
             )
             love.graphics.setColor(255, 255, 255, 255)
         end
 
         love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
-		love.graphics.print("Score: " .. tostring(rightPlayerScore), 1180, 0)
-		love.graphics.print("" ..tostring(canPressTimer),500,0)
+		love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
+		love.graphics.print("" ..tostring(canPressTimer), 360, 0)
+    end
+end
+
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit()
     end
 end
