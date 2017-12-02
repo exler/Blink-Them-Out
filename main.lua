@@ -36,9 +36,10 @@ function love.load()
     rightDead = love.graphics.newImage("gfx/rightDead.png")
 
     scaryImgs = {
-        love.graphics.newImage("gfx/scary1.png"), 
+        love.graphics.newImage("gfx/scary1.png"),
         love.graphics.newImage("gfx/scary2.png"),
-        love.graphics.newImage("gfx/scary3.png")
+        love.graphics.newImage("gfx/scary3.png"),
+        love.graphics.newImage("gfx/scary4.png")
     }
 
     math.randomseed(os.time())
@@ -133,7 +134,7 @@ function love.draw()
                     love.graphics:getWidth() / 2 - 50,
                     love.graphics:getHeight() / 2 - 200
                 )
-                love.graphics.draw(leftPlayer.img, leftPlayer.x, leftPlayer.y)
+                love.graphics.draw(leftBlink, leftPlayer.x, leftPlayer.y)
                 love.graphics.draw(rightDead, rightPlayer.x, rightPlayer.y)
             end
             if rightPlayerWin == true then
@@ -142,19 +143,19 @@ function love.draw()
                     love.graphics:getWidth() / 2 - 50,
                     love.graphics:getHeight() / 2 - 200
                 )
-                love.graphics.draw(rightPlayer.img, rightPlayer.x, rightPlayer.y)
+                love.graphics.draw(rightBlink, rightPlayer.x, rightPlayer.y)
                 love.graphics.draw(leftDead, leftPlayer.x, leftPlayer.y)
             end
 
             love.graphics.print(
                 "Press Space to reset!",
                 love.graphics:getWidth() / 2 - 90,
-                love.graphics:getHeight() / 2
+                love.graphics:getHeight() / 2 - 250
             )
             love.graphics.setColor(255, 255, 255, 255)
         end
 
-		-- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
+    -- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
     end
 end
 
