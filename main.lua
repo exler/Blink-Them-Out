@@ -26,7 +26,7 @@ function love.load()
 
     bgMusic = love.audio.newSource("sfx/bg.mp3")
     scarySound = love.audio.newSource("sfx/scary.wav")
-    -- PressSound = love.audio.newSource("gfx/Press.wav")
+    PressSound = love.audio.newSource("sfx/blink.wav")
 
     bgMusic:setLooping(true)
     bgMusic:play()
@@ -91,7 +91,7 @@ function love.update(dt)
 
         if love.keyboard.isDown("lctrl") and leftEarlyPress == false then
             if canPress == true and leftEarlyPress == false then
-                -- love.audio.play(PressSound)
+                love.audio.play(PressSound)
                 canPress = false
                 leftPlayerWin = true
                 leftPlayerScore = leftPlayerScore + 1
@@ -100,7 +100,7 @@ function love.update(dt)
             end
         elseif love.keyboard.isDown("rctrl") and rightEarlyPress == false then
             if canPress == true and rightEarlyPress == false then
-                -- love.audio.play(PressSound)
+                love.audio.play(PressSound)
                 canPress = false
                 rightPlayerWin = true
                 rightPlayerScore = rightPlayerScore + 1
