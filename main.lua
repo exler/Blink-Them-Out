@@ -1,8 +1,8 @@
--- 3rd party
-Anim = require "lib/anim8"
-
 -- global variables
 gameStart = false
+
+actionKeyLeft = love.keyboard.isDown("lctrl")
+actionKeyRight = love.keyboard.isDown("rctrl")
 
 leftPlayer = {x = -12, y = 160, img = nil}
 leftPlayerWin = false
@@ -31,7 +31,8 @@ function love.load()
     bg = love.graphics.newImage("gfx/bg.png")
 
     bgMusic = love.audio.newSource("sfx/bg.mp3")
-    scarySound = love.audio.newSource("sfx/scary.wav")
+    sweetSound = love.audio.newSource("sfx/sweet.mp3")
+    scarySound = love.audio.newSource("sfx/scary.mp3")
     PressSound = love.audio.newSource("sfx/blink.wav")
 
     bgMusic:setLooping(true)
@@ -70,10 +71,10 @@ function love.update(dt)
     end
 
     if gameStart == true then
-        if leftPlayerWin == true and love.keyboard.isDown "space" or
-        rightPlayerWin == true and love.keyboard.isDown "space" or
-        leftEarlyPress == true and rightEarlyPress == true and love.keyboard.isDown "space" or
-        sweetNoPress == true and love.keyboard.isDown "space" then
+        if (leftPlayerWin == true and love.keyboard.isDown "s" or
+        rightPlayerWin == true and love.keyboard.isDown "s" or
+        leftEarlyPress == true and rightEarlyPress == true and love.keyboard.isDown "s" or
+        sweetNoPress == true and love.keyboard.isDown "s") and (leftPlayerScore < 10 and rightPlayerScore < 10) then
             leftPlayer.img = leftIdle
             leftPlayerWin = false
             leftEarlyPress = false
@@ -92,6 +93,35 @@ function love.update(dt)
             sweetNoPress = false
             sweetNoPressTimerMax = 2
             sweetNoPressTimer = sweetNoPressTimerMax
+            bgMusic:setVolume(1)
+        end
+
+        if love.keyboard.isDown "r" then
+            leftPlayer.img = leftIdle
+            leftPlayerWin = false
+            leftEarlyPress = false
+            leftPlayerScore = 0
+            rightPlayer.img = rightIdle
+            rightPlayerWin = false
+            rightEarlyPress = false
+            rightPlayerScore = 0
+            dontClick = false
+            canPress = false
+            canPressTimerMax = 10
+            canPressTimer = canPressTimerMax
+            math.randomseed(os.time())
+            randomTimer = math.random(20)
+            randomArray = math.random(2)
+            sweetImg = sweetImgs[math.random(#sweetImgs)]
+            scaryImg = scaryImgs[math.random(#scaryImgs)]
+            sweetNoPress = false
+            sweetNoPressTimerMax = 2
+            sweetNoPressTimer = sweetNoPressTimerMax
+            bgMusic:setVolume(1)
+        end
+
+        if leftPlayerScore == 10 or rightPlayerScore == 10 then
+            gameStart = false
         end
 
         if canPressTimer > 0 then
@@ -99,8 +129,10 @@ function love.update(dt)
         end
 
         if canPressTimer < 0 and leftPlayerWin == false and rightPlayerWin == false then
-            if canPress == false then
+            if canPress == false and randomArray == 1 then
                 love.audio.play(scarySound)
+            elseif canPress == false and randomArray == 2 then
+                love.audio.play(sweetSound)
             end
             canPress = true
 
@@ -109,7 +141,7 @@ function love.update(dt)
             end
         end
 
-        if love.keyboard.isDown("lctrl") and leftEarlyPress == false then
+        if love.keyboard.isDown("lctrl") and leftEarlyPress == false and sweetNoPress == false then
             if canPress == true and leftEarlyPress == false and dontClick == false then
                 love.audio.play(PressSound)
                 canPress = false
@@ -123,7 +155,7 @@ function love.update(dt)
             else
                 leftEarlyPress = true
             end
-        elseif love.keyboard.isDown("rctrl") and rightEarlyPress == false then
+        elseif love.keyboard.isDown("rctrl") and rightEarlyPress == false and sweetNoPress == false then
             if canPress == true and rightEarlyPress == false and dontClick == false then
                 love.audio.play(PressSound)
                 canPress = false
@@ -144,13 +176,19 @@ end
 function love.draw()
     love.graphics.draw(bg, 0, 0)
 
-    if gameStart == false then
+    if gameStart == false and (leftPlayerScore < 10 and rightPlayerScore < 10) then
         love.graphics.rectangle("line", 50, love.graphics:getHeight() / 2, 100, 50, 2)
         love.graphics.rectangle("line", rightPlayer.x + 110, love.graphics:getHeight() / 2, 100, 50, 2)
         love.graphics.print("L CTRL", 60, love.graphics:getHeight() / 2 + 20)
         love.graphics.print("R CTRL", rightPlayer.x + 120, love.graphics:getHeight() / 2 + 20)
         love.graphics.print("Blink when you see a monster!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
         love.graphics.print("Press S to start!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
+    elseif gameStart == false and leftPlayerScore == 10 then
+        love.graphics.print("Lefty won the game!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
+        love.graphics.print("Press R to restart!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
+    elseif gameStart == false and rightPlayerScore == 10 then
+        love.graphics.print("Rightyl won the game!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
+        love.graphics.print("Press R to restart!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
     end
 
     if gameStart == true then
@@ -169,15 +207,15 @@ function love.draw()
             bgMusic:setVolume(0)
             if randomArray == 1 then --scary
                 love.graphics.draw(scaryImg, love.graphics:getWidth() / 2 - 256, love.graphics:getHeight() / 2 - 256)
-                love.graphics.print("Blink now!", love.graphics:getWidth() / 2 - 30, love.graphics:getHeight() - 46)
+                love.graphics.print("Blink now!", love.graphics:getWidth() / 2 - 50, love.graphics:getHeight() - 46)
             elseif randomArray == 2 then --sweet
                 love.graphics.draw(sweetImg, love.graphics:getWidth() / 2 - 256, love.graphics:getHeight() / 2 - 256)
-                love.graphics.print("How sweet :3", love.graphics:getWidth() / 2 - 30, love.graphics:getHeight() - 46)
+                love.graphics.print("What a cute creature :3", love.graphics:getWidth() / 2 - 110, love.graphics:getHeight() - 46)
                 dontClick = true
             end
         end
         if dontClick == true and (rightPlayerWin == true or leftPlayerWin == true) then
-            love.graphics.print("Not a monster!", love.graphics:getWidth() / 2 - 60, love.graphics:getHeight() / 2 - 250)
+            love.graphics.print("Not a monster! Press S to reset.", love.graphics:getWidth() / 2 - 130, love.graphics:getHeight() / 2 - 250)
             if rightPlayerWin == true then
                 love.graphics.print(
                     "Righty wins!",
@@ -203,11 +241,16 @@ function love.draw()
                 love.graphics:getWidth() / 2 - 30,
                 love.graphics:getHeight() / 2 - 200
             )
+            love.graphics.print(
+                "Press S to reset!",
+                love.graphics:getWidth() / 2 - 90,
+                love.graphics:getHeight() / 2 - 250
+            )
+            love.graphics.setColor(255, 255, 255, 255)
+
             love.graphics.draw(rightPlayer.img, rightPlayer.x, rightPlayer.y)
             love.graphics.draw(leftPlayer.img, leftPlayer.x, leftPlayer.y)
         elseif (leftPlayerWin == true or rightPlayerWin == true) or (leftEarlyPress == true and rightEarlyPress == true) then
-            bgMusic:setVolume(1)
-
             if leftPlayerWin == true then
                 love.graphics.print(
                     "Lefty wins!",
@@ -228,7 +271,7 @@ function love.draw()
             end
 
             love.graphics.print(
-                "Press Space to reset!",
+                "Press S to reset!",
                 love.graphics:getWidth() / 2 - 90,
                 love.graphics:getHeight() / 2 - 250
             )
@@ -236,7 +279,7 @@ function love.draw()
         end
 
         love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
-        love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
+        love.graphics.print("Score: " .. tostring(rightPlayerScore), 755, 0)
     -- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
     end
 end
