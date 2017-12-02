@@ -22,8 +22,12 @@ function love.load()
     love.graphics.setFont(font)
     bg = love.graphics.newImage("gfx/bg.png")
 
+    bgMusic = love.audio.newSource("sfx/bg.mp3")
     scarySound = love.audio.newSource("sfx/scary.wav")
     -- PressSound = love.audio.newSource("gfx/Press.wav")
+
+    bgMusic:setLooping(true)
+    bgMusic:play()
 
     leftIdle = love.graphics.newImage("gfx/leftPlayer.png")
     leftPlayer.img = leftIdle
@@ -123,11 +127,14 @@ function love.draw()
         end
 
         if canPress == true and leftPlayerWin == false and rightPlayerWin == false then
+            bgMusic:setVolume(0)
             love.graphics.draw(scaryImg, love.graphics:getWidth() / 2 - 256, love.graphics:getHeight() / 2 - 256)
             love.graphics.print("Blink now!", love.graphics:getWidth() / 2 - 30, love.graphics:getHeight() - 46)
         end
 
         if (leftPlayerWin == true or rightPlayerWin == true) or (leftEarlyPress == true and rightEarlyPress == true) then
+            bgMusic:setVolume(1)
+
             if leftPlayerWin == true then
                 love.graphics.print(
                     "Lefty wins!",
