@@ -6,10 +6,12 @@ gameStart = false
 
 leftPlayer = {x = -12, y = 160, img = nil}
 leftPlayerWin = false
+leftPlayerScore = 0
 leftEarlyPress = false
 
 rightPlayer = {x = 580, y = 160, img = nil}
 rightPlayerWin = false
+rightPlayerScore = 0
 rightEarlyPress = false
 
 canPress = false
@@ -92,6 +94,7 @@ function love.update(dt)
                 -- love.audio.play(PressSound)
                 canPress = false
                 leftPlayerWin = true
+                leftPlayerScore = leftPlayerScore + 1
             else
                 leftEarlyPress = true
             end
@@ -100,6 +103,7 @@ function love.update(dt)
                 -- love.audio.play(PressSound)
                 canPress = false
                 rightPlayerWin = true
+                rightPlayerScore = rightPlayerScore + 1
             else
                 rightEarlyPress = true
             end
@@ -162,6 +166,8 @@ function love.draw()
             love.graphics.setColor(255, 255, 255, 255)
         end
 
+    love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
+    love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
     -- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
     end
 end
