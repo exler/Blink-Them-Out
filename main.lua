@@ -115,7 +115,12 @@ function love.draw()
     love.graphics.draw(bg, 0, 0)
 
     if gameStart == false then
-        love.graphics.print("Press S to start!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2)
+        love.graphics.rectangle("line", 50, love.graphics:getHeight() / 2, 100, 50, 2)
+        love.graphics.rectangle("line", rightPlayer.x + 110, love.graphics:getHeight() / 2, 100, 50, 2)
+        love.graphics.print("L CTRL", 60, love.graphics:getHeight() / 2 + 20)
+        love.graphics.print("R CTRL", rightPlayer.x + 120, love.graphics:getHeight() / 2 + 20)
+        love.graphics.print("Blink when you see a monster!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
+        love.graphics.print("Press S to start!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
     end
 
     if gameStart == true then
@@ -166,8 +171,8 @@ function love.draw()
             love.graphics.setColor(255, 255, 255, 255)
         end
 
-    love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
-    love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
+        love.graphics.print("Score: " .. tostring(leftPlayerScore), 10, 0)
+        love.graphics.print("Score: " .. tostring(rightPlayerScore), 760, 0)
     -- love.graphics.print("" ..tostring(canPressTimer), 360, 0)
     end
 end
