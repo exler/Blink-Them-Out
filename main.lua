@@ -187,7 +187,7 @@ function love.draw()
         love.graphics.print("Lefty won the game!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
         love.graphics.print("Press R to restart!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
     elseif gameStart == false and rightPlayerScore == 10 then
-        love.graphics.print("Rightyl won the game!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
+        love.graphics.print("Righty won the game!", love.graphics:getWidth() / 2 - 120, love.graphics:getHeight() / 2)
         love.graphics.print("Press R to restart!", love.graphics:getWidth() / 2 - 70, love.graphics:getHeight() / 2 + 40)
     end
 
