@@ -29,8 +29,23 @@ end
 
 function Start:draw()
     love.graphics.draw(backgroundImg, 0, 0)
-    love.graphics.draw(ryzareLogo, 12, 12)
+    love.graphics.draw(ryzareLogo, windowWidth - ryzareLogo:getWidth() - 12, windowHeight - ryzareLogo:getHeight() - 12)
+
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.draw(titleImg, windowWidth/2 - titleImg:getWidth()/2, 200)
+    love.graphics.setColor(237, 207, 33, 255)
+    love.graphics.draw(titleImg, windowWidth/2 - titleImg:getWidth()/2 + 3 , 203)
     
     self.playButton:draw()
     self.quitButton:draw()
 end
+
+function Start:exitedState()
+end
+
+-- play state
+Play = Game:addState('Play')
+
+function Play:enteredState()
+end
+

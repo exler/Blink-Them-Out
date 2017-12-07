@@ -17,6 +17,7 @@ function love.load()
     -- load sprites
     backgroundImg = love.graphics.newImage('gfx/bg.png')
     ryzareLogo = love.graphics.newImage('gfx/ryzare-logo.png')
+    titleImg = love.graphics.newImage('gfx/title.png')
     -- [[eyes states sprites]]
     leftPlayerImg = love.graphics.newImage('gfx/leftPlayer.png')
     leftBlinkImg = love.graphics.newImage('gfx/leftBlink.png')
