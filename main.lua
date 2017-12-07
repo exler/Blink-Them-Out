@@ -1,5 +1,6 @@
 require 'game'
 require 'button'
+require 'misc'
 
 function love.load()
     math.randomseed(os.time())
@@ -25,6 +26,17 @@ function love.load()
     rightPlayerImg = love.graphics.newImage('gfx/rightPlayer.png')
     rightBlinkImg = love.graphics.newImage('gfx/rightBlink.png')
     rightDeadImg = love.graphics.newImage('gfx/rightDead.png')
+    -- [[monsters/sweet images]]
+    scaryImgs = {
+        love.graphics.newImage('gfx/scary1.png'),
+        love.graphics.newImage('gfx/scary2.png'),
+        love.graphics.newImage('gfx/scary3.png'),
+        love.graphics.newImage('gfx/scary4.png')
+    }
+    sweetImgs = {
+        love.graphics.newImage('gfx/sweet1.png'),
+        love.graphics.newImage('gfx/sweet2.png')
+    }
 
     -- load audio
     backgroundMusic = love.audio.newSource('sfx/bg.mp3')

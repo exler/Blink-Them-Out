@@ -2,7 +2,7 @@ local class = require "libs/middleclass"
 
 Button = class("Button")
 
-function Button:initialize(x, y, w, h, text, onPress, id)
+function Button:initialize(x, y, w, h, text, onPress)
     -- constants
     self.x = x - w / 2
     self.y = y - h / 2
