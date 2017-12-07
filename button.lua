@@ -1,11 +1,11 @@
-local class = require 'libs/middleclass'
+local class = require "libs/middleclass"
 
-Button = class('Button')
+Button = class("Button")
 
 function Button:initialize(x, y, w, h, text, onPress, id)
     -- constants
-    self.x = x
-    self.y = y
+    self.x = x - w / 2
+    self.y = y - h / 2
     self.w = w
     self.h = h
 
@@ -43,15 +43,16 @@ function Button:update(dt)
 end
 
 function Button:draw()
-    if not self.mouseOver then
-        setColor(self.colorid, 2, self.alpha)
-        love.graphics.roundrectangle("fill", self.x - 8, self.y, self.w + 14, self.h + 1, 8)
+    love.graphics.setColor(237, 207, 33, self.alpha)
+    love.graphics.rectangle("fill", self.x - 8, self.y, self.w + 14, self.h + 1, 8)
+    if not self.mouseHover then
         love.graphics.setColor(whiteColor.r, whiteColor.g, whiteColor.b)
         love.graphics.print(self.text, self.x, self.y)
     else
-        setColor(self.colorid, 2, self.alpha)
-        love.graphics.roundrectangle("fill", self.x - 8, self.y, self.w + 14, self.h + 1, 8)
         love.graphics.setColor(blackColor.r, blackColor.g, blackColor.b)
         love.graphics.print(self.text, self.x, self.y)
     end
+
+    -- reset color
+    love.graphics.setColor(whiteColor.r, whiteColor.g, whiteColor.b)
 end
