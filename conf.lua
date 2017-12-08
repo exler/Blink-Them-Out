@@ -3,7 +3,7 @@ function love.conf(t)
     t.window.height = 764
 
     t.version = "0.10.2"
-    t.console = false
+    t.console = true
 
     t.window.title = "Blink Them Out"
     t.window.icon = 'gfx/icon.png'

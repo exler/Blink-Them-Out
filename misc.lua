@@ -1,6 +1,5 @@
 function shuffle(t)
-    local rand = math.random
-    assert(t, "shuffle() expected a table, got nil.")
+    local rand = love.math.random
     local iterations = #t
     local j
 

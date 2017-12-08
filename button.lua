@@ -43,7 +43,7 @@ function Button:update(dt)
 end
 
 function Button:draw()
-    love.graphics.setColor(237, 207, 33, self.alpha)
+    love.graphics.setColor(213, 186, 29, self.alpha)
     love.graphics.rectangle("fill", self.x - 8, self.y, self.w + 14, self.h + 1, 8)
     if not self.mouseHover then
         love.graphics.setColor(whiteColor.r, whiteColor.g, whiteColor.b)
