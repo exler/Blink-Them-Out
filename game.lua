@@ -8,8 +8,8 @@ Game:include(stateful)
 function Game:initialize(state)
     self:gotoState(state)
 
-    self.scoreLeft = 9
-    self.scoreRight = 9
+    self.scoreLeft = 0
+    self.scoreRight = 0
 end
 
 -- start state
@@ -135,8 +135,8 @@ function Play:enteredState()
     self.canBlink = false
     self.isSweet = false
 
-    self.leftPlayer = {x = 12, y = centerY - 128, blinked = false, earlyPress = false, roundWon = false}
-    self.rightPlayer = {x = windowWidth - 312, y = centerY - 128, blinked = false, earlyPress = false, roundWon = false}
+    self.leftPlayer = {x = 12, y = centerY - 128, blinked = false, roundWon = false}
+    self.rightPlayer = {x = windowWidth - 312, y = centerY - 128, blinked = false, roundWon = false}
 
     self.stoper = false
 
@@ -165,37 +165,40 @@ end
 
 function Play:update(dt)
     if
-        love.keyboard.isDown("lctrl") and not self.finished and not self.leftPlayer.blinked and
+        love.keyboard.isDown("lctrl") and not self.leftPlayer.blinked and
             not self.rightPlayer.blinked
      then
         blinkSound:play()
         self.leftPlayer.blinked = true
 
-        if self.canBlink and not self.isSweet and not self.leftPlayer.earlyPress then
+        if self.canBlink and not self.isSweet then
             self.scoreLeft = self.scoreLeft + 1
             self.leftPlayer.roundWon = true
-        elseif self.canBlink and self.isSweet and not self.leftPlayer.earlyPress then
+        elseif self.canBlink and self.isSweet then
             self.scoreLeft = self.scoreLeft - 1
             self.rightPlayer.roundWon = true
-        else
-            self.leftPlayer.earlyPress = true
+        elseif not self.canBlink then
+            self.scoreLeft = self.scoreLeft - 1
+            self.rightPlayer.roundWon = true
         end
     end
     if
-        love.keyboard.isDown("rctrl") and not self.finished and not self.rightPlayer.blinked and
+        love.keyboard.isDown("rctrl") and not self.rightPlayer.blinked and
             not self.leftPlayer.blinked
      then
         blinkSound:play()
         self.rightPlayer.blinked = true
 
-        if self.canBlink and not self.isSweet and not self.rightPlayer.earlyPress then
+        if self.canBlink and not self.isSweet then
             self.scoreRight = self.scoreRight + 1
             self.rightPlayer.roundWon = true
-        elseif self.canBlink and self.isSweet and not self.rightPlayer.earlyPress then
+        elseif self.canBlink and self.isSweet then
             self.scoreRight = self.scoreRight - 1
             self.leftPlayer.roundWon = true
-        else
-            self.rightPlayer.earlyPress = true
+        elseif not self.canBlink then
+            self.scoreRight = self.scoreRight - 1
+            self.leftPlayer.roundWon = true
+            self.canBlink = false
         end
     end
 
@@ -270,7 +273,7 @@ function Play:draw()
             love.graphics.draw(rightBlinkImg, self.rightPlayer.x, self.rightPlayer.y)
         end
 
-        if self.canBlink == true then
+        if self.canBlink == true and (not self.leftPlayer.roundWon and not self.rightPlayer.roundWon) then
             if self.isSweet then
                 love.graphics.draw(sweetImgs[1], centerX - 256, centerY - 256)
                 love.graphics.print("So sweet!", centerX - 50, windowHeight - 50)
