@@ -33,7 +33,8 @@ function love.load()
         love.graphics.newImage('gfx/scary1.png'),
         love.graphics.newImage('gfx/scary2.png'),
         love.graphics.newImage('gfx/scary3.png'),
-        love.graphics.newImage('gfx/scary4.png')
+        love.graphics.newImage('gfx/scary4.png'),
+        love.graphics.newImage('gfx/scary5.png')
     }
     sweetImgs = {
         love.graphics.newImage('gfx/sweet1.png'),
@@ -45,7 +46,11 @@ function love.load()
     backgroundMusic:setLooping(true)
     backgroundMusic:play()
 
+    tensionMusic = love.audio.newSource('sfx/tension.mp3')
+
     blinkSound = love.audio.newSource('sfx/blink.wav')
+    scarySound = love.audio.newSource('sfx/scary.mp3')
+    sweetSound = love.audio.newSource('sfx/sweet.mp3')
 
     -- set colors
     whiteColor = {r=220, g=220, b=230}
