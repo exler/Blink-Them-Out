@@ -121,6 +121,7 @@ Play = Game:addState("Play")
 
 function Play:enteredState()
     backgroundMusic:stop()
+    tensionMusic:play()
 
     self.started = true
     self.toMenu = false
@@ -139,6 +140,7 @@ function Play:enteredState()
     self.rightPlayer = {x = windowWidth - 312, y = centerY - 128, blinked = false, roundWon = false}
 
     self.stoper = false
+    self.playOnce = true
 
     -- shuffle twice each for better results!
     shuffle(scaryImgs)
@@ -268,9 +270,16 @@ function Play:draw()
         end
 
         if self.canBlink == true and (not self.leftPlayer.roundWon and not self.rightPlayer.roundWon) then
+            tensionMusic:stop()
+            
             if self.isSweet then
                 love.graphics.draw(sweetImgs[1], centerX - 256, centerY - 256)
                 love.graphics.print("So sweet!", centerX - 50, windowHeight - 50)
+
+                if self.playOnce then
+                    self.playOnce = false
+                    sweetSound:play()
+                end
 
                 if self.isTie then
                     love.graphics.print("Tie!", centerX - 30, 75)
@@ -278,6 +287,11 @@ function Play:draw()
             elseif not self.isSweet then
                 love.graphics.draw(scaryImgs[1], centerX - 256, centerY - 256)
                 love.graphics.print("Blink now!", centerX - 50, windowHeight - 50)
+
+                if self.playOnce then
+                    self.playOnce = false
+                    scarySound:play()
+                end
             end
         end
 
