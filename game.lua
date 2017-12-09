@@ -159,7 +159,9 @@ function Play:draw()
                 self.isSweet = true
 
                 Timer.after(self.timeToTie, function()
-                    self.isTie = true
+                    if not self.leftPlayer.roundWon and not self.rightPlayer.roundWon then
+                        self.isTie = true
+                    end
                 end)
             elseif self.randomArray == 2 then
                 self.isSweet = false
@@ -172,12 +174,20 @@ function Play:draw()
     end
 
     if not self.leftPlayer.blinked then
-        love.graphics.draw(leftPlayerImg, self.leftPlayer.x, self.leftPlayer.y)
+        if self.rightPlayer.roundWon then
+            love.graphics.draw(leftDeadImg, self.leftPlayer.x, self.leftPlayer.y)
+        else
+            love.graphics.draw(leftPlayerImg, self.leftPlayer.x, self.leftPlayer.y)
+        end
     else
         love.graphics.draw(leftBlinkImg, self.leftPlayer.x, self.leftPlayer.y)
     end
     if not self.rightPlayer.blinked then
-        love.graphics.draw(rightPlayerImg, self.rightPlayer.x, self.rightPlayer.y)
+        if self.leftPlayer.roundWon then
+            love.graphics.draw(rightDeadImg, self.rightPlayer.x, self.rightPlayer.y)
+        else
+            love.graphics.draw(rightPlayerImg, self.rightPlayer.x, self.rightPlayer.y)
+        end
     else
         love.graphics.draw(rightBlinkImg, self.rightPlayer.x, self.rightPlayer.y)
     end
@@ -202,8 +212,6 @@ function Play:draw()
 
         if not self.stoper then
             self.stoper = true
-
-            love.graphics.print('Another round starting soon..', centerX - 200, 100)
 
             local counter = 3
         
