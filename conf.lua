@@ -1,16 +1,13 @@
 function love.conf(t)
-    -- global variables
-    windowWidth = 840
-    windowHeight = 540
+    t.window.width = 1188
+    t.window.height = 764
 
     t.version = "0.10.2"
-    t.console = false
+    t.console = true
 
-    t.window.title = "VAFG"
-    t.window.icon = nil
+    t.window.title = "Blink Them Out"
+    t.window.icon = 'gfx/icon.png'
 
-    t.window.width = windowWidth
-    t.window.height = windowHeight
     t.window.resizable = false
     t.window.fullscreen = false
 end
