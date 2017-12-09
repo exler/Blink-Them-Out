@@ -33,7 +33,8 @@ function love.load()
         love.graphics.newImage('gfx/scary1.png'),
         love.graphics.newImage('gfx/scary2.png'),
         love.graphics.newImage('gfx/scary3.png'),
-        love.graphics.newImage('gfx/scary4.png')
+        love.graphics.newImage('gfx/scary4.png'),
+        love.graphics.newImage('gfx/scary5.png')
     }
     sweetImgs = {
         love.graphics.newImage('gfx/sweet1.png'),

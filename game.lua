@@ -164,10 +164,7 @@ function Play:enteredState()
 end
 
 function Play:update(dt)
-    if
-        love.keyboard.isDown("lctrl") and not self.leftPlayer.blinked and
-            not self.rightPlayer.blinked
-     then
+    if love.keyboard.isDown("lctrl") and not self.leftPlayer.blinked and not self.rightPlayer.blinked then
         blinkSound:play()
         self.leftPlayer.blinked = true
 
@@ -182,10 +179,7 @@ function Play:update(dt)
             self.rightPlayer.roundWon = true
         end
     end
-    if
-        love.keyboard.isDown("rctrl") and not self.rightPlayer.blinked and
-            not self.leftPlayer.blinked
-     then
+    if love.keyboard.isDown("rctrl") and not self.rightPlayer.blinked and not self.leftPlayer.blinked then
         blinkSound:play()
         self.rightPlayer.blinked = true
 
@@ -247,9 +241,9 @@ function Play:draw()
         self.menuButton:draw()
 
         if self.scoreLeft == 10 then
-            love.graphics.print("Left player wins!", centerX - 100, centerY-10)
+            love.graphics.print("Left player wins!", centerX - 100, centerY - 10)
         elseif self.scoreRight == 10 then
-            love.graphics.print("Right players wins!", centerX - 103, centerY-10)
+            love.graphics.print("Right players wins!", centerX - 103, centerY - 10)
         end
     end
 
