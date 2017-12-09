@@ -7,6 +7,9 @@ Game:include(stateful)
 
 function Game:initialize(state)
     self:gotoState(state)
+
+    self.scoreLeft = 0
+    self.scoreRight = 0
 end
 
 -- start state
@@ -81,9 +84,7 @@ function Play:enteredState()
 
     self.started = true
     self.finished = false
-
-    self.scoreLeft = 0
-    self.scoreRight = 0
+    self.isTie = false
 
     self.roundBeginTimer = 3
     self.timeToTie = 2
@@ -94,8 +95,10 @@ function Play:enteredState()
     self.canBlink = false
     self.isSweet = false
 
-    self.leftPlayer = {x=12, y=centerY-128, blinked=false, earlyPress=false}
-    self.rightPlayer = {x=windowWidth-312, y=centerY-128, blinked=false, earlyPress=false}
+    self.leftPlayer = {x=12, y=centerY-128, blinked=false, earlyPress=false, roundWon=false}
+    self.rightPlayer = {x=windowWidth-312, y=centerY-128, blinked=false, earlyPress=false, roundWon=false}
+
+    self.stoper = false
 
     -- shuffle twice each for better results!
     shuffle(scaryImgs)
@@ -108,13 +111,33 @@ function Play:enteredState()
 end
 
 function Play:update(dt)
-    if love.keyboard.isDown('lctrl') and not self.finished then
+    if love.keyboard.isDown('lctrl') and not self.finished and not self.leftPlayer.blinked and not self.rightPlayer.blinked then
         blinkSound:play()
         self.leftPlayer.blinked = true
+
+        if self.canBlink and not self.isSweet and not self.leftPlayer.earlyPress then
+            self.scoreLeft = self.scoreLeft + 1
+            self.leftPlayer.roundWon = true
+        elseif self.canBlink and self.isSweet and not self.leftPlayer.earlyPress then
+            self.scoreLeft = self.scoreLeft - 1
+            self.rightPlayer.roundWon = true
+        else
+            self.leftPlayer.earlyPress = true
+        end
     end
-    if love.keyboard.isDown('rctrl') and not self.finished then
+    if love.keyboard.isDown('rctrl') and not self.finished and not self.rightPlayer.blinked and not self.leftPlayer.blinked then
         blinkSound:play()
         self.rightPlayer.blinked = true
+
+        if self.canBlink and not self.isSweet and not self.rightPlayer.earlyPress then
+            self.scoreRight = self.scoreRight + 1
+            self.rightPlayer.roundWon = true
+        elseif self.canBlink and self.isSweet and not self.rightPlayer.earlyPress then
+            self.scoreRight = self.scoreRight - 1
+            self.leftPlayer.roundWon = true
+        else
+            self.rightPlayer.earlyPress = true
+        end
     end
 end
 
@@ -123,7 +146,7 @@ function Play:draw()
 
     -- print scores
     love.graphics.print('Score: ' .. self.scoreLeft, 8, 6)
-    love.graphics.print('Score: ' .. self.scoreRight, windowWidth - 104, 6)
+    love.graphics.print('Score: ' .. self.scoreRight, windowWidth - 116, 6)
 
     if self.started then
         self.started = false
@@ -134,6 +157,10 @@ function Play:draw()
             
             if self.randomArray == 1 then
                 self.isSweet = true
+
+                Timer.after(self.timeToTie, function()
+                    self.isTie = true
+                end)
             elseif self.randomArray == 2 then
                 self.isSweet = false
             end
@@ -158,8 +185,38 @@ function Play:draw()
     if self.canBlink == true then
         if self.isSweet then
             love.graphics.draw(sweetImgs[1], centerX-256, centerY-256)
+            love.graphics.print('So sweet!', centerX-50, windowHeight-50)
+            
+            if self.isTie then
+                love.graphics.print('Tie!', centerX-30, 75)
+            end
         elseif not self.isSweet then
             love.graphics.draw(scaryImgs[1], centerX-256, centerY-256)
+            love.graphics.print('Blink now!', centerX-50, windowHeight-50)
+        end
+    end
+
+    if self.isTie or (self.leftPlayer.roundWon or self.rightPlayer.roundWon) then
+
+        love.graphics.print('Another round starting soon..', centerX - 220, 100)
+
+        if not self.stoper then
+            self.stoper = true
+
+            love.graphics.print('Another round starting soon..', centerX - 200, 100)
+
+            local counter = 3
+        
+            Timer.every(1, function() 
+                print(counter) -- [[DEBUG]]
+
+                if counter == 0 then
+                    Timer.clear()
+                    game:gotoState('Play')
+                end
+
+                counter = counter - 1
+            end)
         end
     end
 end
