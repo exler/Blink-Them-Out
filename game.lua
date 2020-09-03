@@ -59,7 +59,6 @@ end
 
 function Start:draw()
     love.graphics.draw(backgroundImg, 0, 0)
-    love.graphics.draw(ryzareLogo, windowWidth - ryzareLogo:getWidth() - 12, windowHeight - ryzareLogo:getHeight() - 12)
 
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.draw(titleImg, windowWidth / 2 - titleImg:getWidth() / 2, 200)

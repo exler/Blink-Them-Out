@@ -19,7 +19,6 @@ function love.load()
 
     -- load sprites
     backgroundImg = love.graphics.newImage('gfx/bg.png')
-    ryzareLogo = love.graphics.newImage('gfx/ryzare-logo.png')
     titleImg = love.graphics.newImage('gfx/title.png')
     -- [[eyes states sprites]]
     leftPlayerImg = love.graphics.newImage('gfx/leftPlayer.png')
@@ -42,15 +41,15 @@ function love.load()
     }
 
     -- load audio
-    backgroundMusic = love.audio.newSource('sfx/bg.mp3')
+    backgroundMusic = love.audio.newSource('sfx/bg.mp3', 'static')
     backgroundMusic:setLooping(true)
     backgroundMusic:play()
 
-    tensionMusic = love.audio.newSource('sfx/tension.mp3')
+    tensionMusic = love.audio.newSource('sfx/tension.mp3', 'static')
 
-    blinkSound = love.audio.newSource('sfx/blink.wav')
-    scarySound = love.audio.newSource('sfx/scary.mp3')
-    sweetSound = love.audio.newSource('sfx/sweet.mp3')
+    blinkSound = love.audio.newSource('sfx/blink.wav', 'static')
+    scarySound = love.audio.newSource('sfx/scary.mp3', 'static')
+    sweetSound = love.audio.newSource('sfx/sweet.mp3', 'static')
 
     -- set colors
     whiteColor = {r=220, g=220, b=230}

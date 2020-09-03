@@ -9,7 +9,7 @@
 The game was made in ***48 hours*** for Retro Game Jam.
 
 ## Download
-You can download **Blink Them Out** from the [itch.io page](https://ryzare.itch.io/Blink) or [releases tab](https://github.com/exler/blakjak/releases). 
+You can download **Blink Them Out** from the [itch.io page](https://exler.itch.io/Blink) or [releases tab](https://github.com/exler/blink-them-out/releases). 
 * *.love* - supports every system, but in order to play it you have to install the [LÖVE2D framework v0.10.2](https://love2d.org/)
 * *.zip* - contains *.exe* packaged with DLL files so you can play the game without installing anything (Windows only)
 
