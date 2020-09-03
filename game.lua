@@ -130,7 +130,7 @@ function Play:enteredState()
     self.timeToTie = 2
 
     self.jumpscareTimer = love.math.random(2, 10)
-    print(self.jumpscareTimer) -- [[DEBUG]]
+    -- print(self.jumpscareTimer) -- [[DEBUG]]
 
     self.canBlink = false
     self.isSweet = false
@@ -216,7 +216,7 @@ function Play:draw()
             function()
                 self.canBlink = true
 
-                print("Jumpscare") -- [[DEBUG]]
+                -- print("Jumpscare") -- [[DEBUG]]
 
                 if self.randomArray == 1 then
                     self.isSweet = true
@@ -305,7 +305,7 @@ function Play:draw()
                 Timer.every(
                     1,
                     function()
-                        print(counter) -- [[DEBUG]]
+                        -- print(counter) -- [[DEBUG]]
 
                         if counter == 0 then
                             Timer.clear()
